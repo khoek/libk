@@ -1,5 +1,8 @@
 import system.io
 
+-- Supress "xxx is noncomputable" errors when running on vanilla lean
+noncomputable theory
+
 -- Boilerplate for implementing extra IO functions
 class vm_extra_io (m : Type → Type → Type) [monad_io m] :=
 (nop   : io unit)
@@ -11,9 +14,7 @@ namespace k
 
 -- Functions which use IO types go via a call like this. (Routed through the instance
 -- of vm_extra_io.)
--- FIXME Having "noncomputable" here is a compromise with the compiler.
--- If we get serious about IO extensions, this will have to change.
-noncomputable def greet : io unit := vm_extra_io.greet io_core
+def greet : io unit := vm_extra_io.greet io_core
 
 -- Functions which do not use IO types are just declared like this.
 def find_separating_hyperplane {dim : ℕ} (a_vects : list (array dim ℕ))
